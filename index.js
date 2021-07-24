@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 
 // create express server
 
@@ -6,16 +7,11 @@ const app = express();
 
 
 // Routes
-// app.get('/', (req, res) => {
-//     console.log('/')
-//     res.json({
-//         ok: true
-//     })
-// });
+app.use('/api/auth', require('./routes/auth'))
 
 app.use( express.static('public'))
 
 // Listen request
-app.listen( 4000, () =>{
-    console.log(`Hello Server ${ 4000 }`)
+app.listen( process.env.PORT, () =>{
+    console.log(`Hello Server ${ process.env.PORT }`)
 } )
