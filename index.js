@@ -5,11 +5,14 @@ require('dotenv').config();
 
 const app = express();
 
+// Read, parse body
+app.use( express.json() );
+
+app.use( express.static('public'))
 
 // Routes
 app.use('/api/auth', require('./routes/auth'))
 
-app.use( express.static('public'))
 
 // Listen request
 app.listen( process.env.PORT, () =>{
