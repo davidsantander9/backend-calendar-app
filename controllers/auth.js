@@ -10,7 +10,7 @@ const createUser = async(req, res = response) =>{
     
     try {
 
-        let user = User.findOne({ email });
+        let user = await User.findOne({ email });
 
         if ( user ){
             return res.status(400).json({
@@ -45,13 +45,48 @@ const createUser = async(req, res = response) =>{
     
 }
 
-const loginUser= (req, res = response) =>{
+const loginUser = async(req, res = response) =>{
 
-    res.json({
-        ok: true,
-        msg: 'login',
-        user: req.body,
-    })
+    const { email, password } = req.body;
+
+    try {
+
+        const user = await User.findOne({ email });
+
+        if ( !user ){
+            return res.status(400).json({
+                ok: false,
+                msg: 'password and email incorrect',
+            });
+        } 
+        
+        const validPassword  = bcrypt.compareSync( password, user.password );
+
+        if( !validPassword ){
+            return res.status(400).json({
+                ok: false,
+                msg: 'password and email incorrect!', 
+            }); 
+        }
+
+        res.status(200).json({
+            ok: true,
+            uid: user.id,
+            name: user.name
+        });
+
+
+        
+    } catch (error) {
+
+        console.log(error)
+
+        return res.status(500).json({
+            ok: false,
+            msg: 'Call admin'
+        });
+        
+    }
 }
 
 const renewToken = (req, res = response) =>{
