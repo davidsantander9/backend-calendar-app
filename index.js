@@ -15,13 +15,14 @@ app.use(cors());
 // Read, parse body
 app.use( express.json() );
 
-app.use( express.static('public'))
+app.use( express.static('public'));
 
 // Routes
-app.use('/api/auth', require('./routes/auth'))
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/events', require('./routes/events'));
 
 
 // Listen request
 app.listen( process.env.PORT, () =>{
     console.log(`Hello Server ${ process.env.PORT }`)
-} )
+} );
