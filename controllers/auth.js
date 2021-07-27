@@ -1,6 +1,7 @@
 const { response } = require('express');
-const { validationResult } = require('express-validator');
-const User = require('../models/User')
+const bcrypt = require('bcryptjs');
+
+const User = require('../models/User');
 
 
 const createUser = async(req, res = response) =>{    
@@ -12,16 +13,22 @@ const createUser = async(req, res = response) =>{
         let user = User.findOne({ email });
 
         if ( user ){
-            res.status(400).json({
+            return res.status(400).json({
                 ok: false,
                 msg: 'user already exists',
             });
         }
-        // const user = new User( req.body );
 
-        // await user.save();
+        user = new User( req.body );
 
-        res.status(200).json({
+        // encrypt password
+        const salt = bcrypt.genSaltSync();
+        user.password = bcrypt.hashSync( password, salt );
+
+        await user.save();
+
+
+        return res.status(200).json({
             ok: true,
             uid: user.id,
             name: user.name
