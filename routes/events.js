@@ -9,6 +9,8 @@ const {
     deleteEvent,
 
 } = require('../controllers/events');
+const { validateFields } = require('../middlewares/field-validator');
+const { isDate } = require('../helpers/isDate');
 
 const router = Router();
 
@@ -16,7 +18,14 @@ router.use( validateJWT );
 
 router.get('/', getEvents);
 
-router.post('/', createEvent);
+router.post('/', 
+    [
+        check('title', 'Title is require').not().isEmpty(),
+        check('start', 'start date is require').custom( isDate ),
+        check('end', 'end date is require').custom( isDate ),
+        validateFields
+    ],
+    createEvent);
 
 router.put('/:id', updateEvent);
 
