@@ -1,4 +1,6 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require('mongoose');
+const Event = require('../models/Event');
+
 
 const eventSchema = Schema({
     title: {
